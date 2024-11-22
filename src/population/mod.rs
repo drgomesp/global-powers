@@ -1,5 +1,3 @@
-use crate::region::State;
-
 #[derive(Debug)]
 pub enum Class {
     Upper,
@@ -31,17 +29,36 @@ impl Religion {
 }
 
 #[derive(Debug)]
+pub struct Ethnicity {
+    name: String,
+}
+
+impl Ethnicity {
+    pub fn new(name: String) -> Self {
+        Self { name }
+    }
+}
+
+#[derive(Debug)]
 pub struct Group {
     state_id: String,
+    culture: Ethnicity,
     profession: Profession,
     religion: Religion,
     pub population: u64,
 }
 
 impl Group {
-    pub fn new(state_id: String, profession: Profession, religion: Religion, population: u64) -> Self {
+    pub fn new(
+        state_id: String,
+        culture: Ethnicity,
+        profession: Profession,
+        religion: Religion,
+        population: u64,
+    ) -> Self {
         Self {
             state_id,
+            culture,
             profession,
             religion,
             population,

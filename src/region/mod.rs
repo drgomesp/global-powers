@@ -9,8 +9,13 @@ pub struct State {
 }
 
 impl State {
-    pub fn new(id: String ,name: String) -> Self {
-        Self { id, name, groups: vec![], population: 0 }
+    pub fn new(id: String, name: String) -> Self {
+        Self {
+            id,
+            name,
+            groups: vec![],
+            population: 0,
+        }
     }
 
     pub fn add_group(&mut self, group: Group) {
@@ -27,7 +32,10 @@ pub struct Country {
 
 impl Country {
     pub fn new() -> Self {
-        Self { states: vec![], population: 0 }
+        Self {
+            states: vec![],
+            population: 0,
+        }
     }
 
     pub fn add_state(&mut self, state: State) {
