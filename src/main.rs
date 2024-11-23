@@ -1,5 +1,6 @@
 use crate::population::{Class, Ethnicity, Group, Profession, Religion, SubGroup};
 use crate::region::{Country, State};
+use rand::Rng;
 
 mod population;
 mod region;
@@ -23,39 +24,23 @@ fn main() {
     let public_worker = Profession::new(Class::Middle, "Public Worker".into());
     let influencer = Profession::new(Class::Upper, "Influencer".into());
 
-    let mut sc_construction_workers = Group::new(sc.id.clone(), &construction_worker);
-    let mut rs_construction_workers = Group::new(rs.id.clone(), &construction_worker);
-    let mut rs_public_workers = Group::new(rs.id.clone(), &public_worker);
-    let mut sp_influencers = Group::new(sp.id.clone(), &influencer);
+    for mut state in [sc, rs, sp] {
+        for profession in [&construction_worker, &public_worker, &influencer] {
+            let mut group = Group::new(state.id.clone(), profession);
 
-    sc_construction_workers.add_sub_group(SubGroup::new(&white, &catholic, 10_000));
-    sc_construction_workers.add_sub_group(SubGroup::new(&white, &protestant, 10_000));
-    sc_construction_workers.add_sub_group(SubGroup::new(&mixed, &catholic, 10_000));
-    sc_construction_workers.add_sub_group(SubGroup::new(&mixed, &protestant, 10_000));
-    sc_construction_workers.add_sub_group(SubGroup::new(&black, &catholic, 10_000));
+            for ethnicity in [&white, &mixed, &black] {
+                for religion in [&catholic, &protestant, &agnostic] {
+                    let population = rand::thread_rng().gen_range(0..10_000);
 
-    rs_construction_workers.add_sub_group(SubGroup::new(&white, &catholic, 10_000));
-    rs_construction_workers.add_sub_group(SubGroup::new(&white, &protestant, 10_000));
-    rs_construction_workers.add_sub_group(SubGroup::new(&white, &agnostic, 10_000));
+                    group.add_sub_group(SubGroup::new(ethnicity, religion, population));
+                }
+            }
 
-    rs_public_workers.add_sub_group(SubGroup::new(&white, &catholic, 10_000));
-    rs_public_workers.add_sub_group(SubGroup::new(&white, &protestant, 10_000));
-    rs_public_workers.add_sub_group(SubGroup::new(&mixed, &catholic, 10_000));
-    rs_public_workers.add_sub_group(SubGroup::new(&black, &catholic, 10_000));
+            state.add_group(group)
+        }
 
-    sp_influencers.add_sub_group(SubGroup::new(&white, &catholic, 10_000));
-    sp_influencers.add_sub_group(SubGroup::new(&white, &protestant, 10_000));
-    sp_influencers.add_sub_group(SubGroup::new(&mixed, &catholic, 10_000));
-    sp_influencers.add_sub_group(SubGroup::new(&black, &catholic, 10_000));
-
-    sc.add_group(sc_construction_workers);
-    rs.add_group(rs_public_workers);
-    rs.add_group(rs_construction_workers);
-    sp.add_group(sp_influencers);
-
-    brazil.add_state(&sc);
-    brazil.add_state(&rs);
-    brazil.add_state(&sp);
+        brazil.add_state(state);
+    }
 
     println!("{:#?}", brazil);
 }

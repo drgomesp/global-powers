@@ -27,7 +27,7 @@ impl<'a> State<'a> {
 
 #[derive(Debug)]
 pub struct Country<'a> {
-    states: HashMap<String, &'a State<'a>>,
+    states: HashMap<String, State<'a>>,
     pub population: u64,
 }
 
@@ -39,7 +39,7 @@ impl<'a> Country<'a> {
         }
     }
 
-    pub fn add_state(&mut self, state: &'a State<'a>) {
+    pub fn add_state(&mut self, state: State<'a>) {
         self.population += state.population;
         self.states.insert(state.id.clone(), state);
     }
