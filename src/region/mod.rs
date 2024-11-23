@@ -1,4 +1,5 @@
 use crate::population::Group;
+use std::collections::HashMap;
 
 #[derive(Debug)]
 pub struct State<'a> {
@@ -26,20 +27,20 @@ impl<'a> State<'a> {
 
 #[derive(Debug)]
 pub struct Country<'a> {
-    states: Vec<State<'a>>,
+    states: HashMap<String, &'a State<'a>>,
     pub population: u64,
 }
 
 impl<'a> Country<'a> {
     pub fn new() -> Self {
         Self {
-            states: vec![],
+            states: HashMap::new(),
             population: 0,
         }
     }
 
-    pub fn add_state(&mut self, state: State<'a>) {
+    pub fn add_state(&mut self, state: &'a State<'a>) {
         self.population += state.population;
-        self.states.push(state);
+        self.states.insert(state.id.clone(), state);
     }
 }

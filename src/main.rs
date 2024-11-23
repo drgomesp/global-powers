@@ -34,6 +34,10 @@ fn main() {
     sc_construction_workers.add_sub_group(SubGroup::new(&mixed, &protestant, 10_000));
     sc_construction_workers.add_sub_group(SubGroup::new(&black, &catholic, 10_000));
 
+    rs_construction_workers.add_sub_group(SubGroup::new(&white, &catholic, 10_000));
+    rs_construction_workers.add_sub_group(SubGroup::new(&white, &protestant, 10_000));
+    rs_construction_workers.add_sub_group(SubGroup::new(&white, &agnostic, 10_000));
+
     rs_public_workers.add_sub_group(SubGroup::new(&white, &catholic, 10_000));
     rs_public_workers.add_sub_group(SubGroup::new(&white, &protestant, 10_000));
     rs_public_workers.add_sub_group(SubGroup::new(&mixed, &catholic, 10_000));
@@ -49,9 +53,9 @@ fn main() {
     rs.add_group(rs_construction_workers);
     sp.add_group(sp_influencers);
 
-    brazil.add_state(sc);
-    brazil.add_state(rs);
-    brazil.add_state(sp);
+    brazil.add_state(&sc);
+    brazil.add_state(&rs);
+    brazil.add_state(&sp);
 
     println!("{:#?}", brazil);
 }
