@@ -1,8 +1,17 @@
+use strum_macros::EnumIter;
+
 #[derive(Debug)]
 pub enum Class {
     Upper,
     Middle,
     Lower,
+}
+
+#[derive(Debug, EnumIter)]
+pub enum Age {
+    Children,
+    Adult,
+    Senior,
 }
 
 #[derive(Debug)]

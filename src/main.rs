@@ -1,6 +1,7 @@
-use crate::population::{Class, Ethnicity, Group, Profession, Religion, SubGroup};
+use crate::population::{Age, Class, Ethnicity, Group, Profession, Religion, SubGroup};
 use crate::region::{Country, State};
 use rand::Rng;
+use strum::IntoEnumIterator;
 
 mod population;
 mod region;
@@ -8,35 +9,53 @@ mod region;
 fn main() {
     let mut brazil = Country::new();
 
-    let mut sc = State::new("SC".into(), "Santa Catarina".into());
-    let mut rs = State::new("RS".into(), "Rio Grande do Sul".into());
-    let mut sp = State::new("SP".into(), "Sao Paulo".into());
+    let states = [
+        State::new("SC".into(), "Santa Catarina".into()),
+        State::new("RS".into(), "Rio Grande do Sul".into()),
+        State::new("SP".into(), "Sao Paulo".into()),
+    ];
 
-    let white = Ethnicity::new("White".into());
-    let mixed = Ethnicity::new("Mixed".into());
-    let black = Ethnicity::new("Black".into());
+    let ethnicities = [
+        Ethnicity::new("Mixed".into()),
+        Ethnicity::new("White".into()),
+        Ethnicity::new("Black".into()),
+        Ethnicity::new("Indigenous".into()),
+        Ethnicity::new("Asian".into()),
+    ];
 
-    let catholic = Religion::new("Catholic".into());
-    let protestant = Religion::new("Protestant".into());
-    let agnostic = Religion::new("Agnostic".into());
+    let religions = [
+        Religion::new("Catholic".into()),
+        Religion::new("Protestant".into()),
+        Religion::new("African".into()),
+        Religion::new("Agnostic".into()),
+        Religion::new("Other".into()),
+    ];
 
-    let construction_worker = Profession::new(Class::Lower, "Construction Worker".into());
-    let public_worker = Profession::new(Class::Middle, "Public Worker".into());
-    let influencer = Profession::new(Class::Upper, "Influencer".into());
+    let professions = [
+        Profession::new(Class::Lower, "Construction Worker".into()),
+        Profession::new(Class::Middle, "Public Worker".into()),
+        Profession::new(Class::Upper, "Influencer".into()),
+    ];
 
-    for mut state in [sc, rs, sp] {
-        for profession in [&construction_worker, &public_worker, &influencer] {
-            let mut group = Group::new(state.id.clone(), profession);
+    let unemployed = Profession::new(Class::Lower, "Unemployed".into());
 
-            for ethnicity in [&white, &mixed, &black] {
-                for religion in [&catholic, &protestant, &agnostic] {
-                    let population = rand::thread_rng().gen_range(0..10_000);
+    for mut state in states {
+        for age in Age::iter() {
+            for profession in &professions {
+                let mut group = match age {
+                    Age::Children | Age::Senior => Group::new(state.id.clone(), &unemployed),
+                    Age::Adult => Group::new(state.id.clone(), profession),
+                };
 
-                    group.add_sub_group(SubGroup::new(ethnicity, religion, population));
+                for ethnicity in &ethnicities {
+                    for religion in &religions {
+                        let population = rand::thread_rng().gen_range(0..10_000);
+                        group.add_sub_group(SubGroup::new(ethnicity, religion, population));
+                    }
                 }
-            }
 
-            state.add_group(group)
+                state.add_group(group)
+            }
         }
 
         brazil.add_state(state);
