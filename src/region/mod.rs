@@ -1,14 +1,14 @@
 use crate::population::Group;
 
 #[derive(Debug)]
-pub struct State {
+pub struct State<'a> {
     pub id: String,
     name: String,
-    groups: Vec<Group>,
-    population: u64,
+    groups: Vec<Group<'a>>,
+    pub population: u64,
 }
 
-impl State {
+impl<'a> State<'a> {
     pub fn new(id: String, name: String) -> Self {
         Self {
             id,
@@ -18,19 +18,19 @@ impl State {
         }
     }
 
-    pub fn add_group(&mut self, group: Group) {
+    pub fn add_group(&mut self, group: Group<'a>) {
         self.population += group.population;
         self.groups.push(group);
     }
 }
 
 #[derive(Debug)]
-pub struct Country {
-    states: Vec<State>,
-    population: u64,
+pub struct Country<'a> {
+    states: Vec<State<'a>>,
+    pub population: u64,
 }
 
-impl Country {
+impl<'a> Country<'a> {
     pub fn new() -> Self {
         Self {
             states: vec![],
@@ -38,7 +38,7 @@ impl Country {
         }
     }
 
-    pub fn add_state(&mut self, state: State) {
+    pub fn add_state(&mut self, state: State<'a>) {
         self.population += state.population;
         self.states.push(state);
     }

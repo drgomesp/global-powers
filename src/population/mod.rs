@@ -40,26 +40,40 @@ impl Ethnicity {
 }
 
 #[derive(Debug)]
-pub struct Group {
+pub struct Group<'a> {
     state_id: String,
-    culture: Ethnicity,
-    profession: Profession,
-    religion: Religion,
+    profession: &'a Profession,
+    sub_groups: Vec<SubGroup<'a>>,
     pub population: u64,
 }
 
-impl Group {
-    pub fn new(
-        state_id: String,
-        culture: Ethnicity,
-        profession: Profession,
-        religion: Religion,
-        population: u64,
-    ) -> Self {
+impl<'a> Group<'a> {
+    pub fn new(state_id: String, profession: &'a Profession) -> Self {
         Self {
             state_id,
-            culture,
             profession,
+            sub_groups: Vec::new(),
+            population: 0,
+        }
+    }
+
+    pub fn add_sub_group(&mut self, sub_group: SubGroup<'a>) {
+        self.population += sub_group.population;
+        self.sub_groups.push(sub_group);
+    }
+}
+
+#[derive(Debug)]
+pub struct SubGroup<'a> {
+    ethnicity: &'a Ethnicity,
+    religion: &'a Religion,
+    population: u64,
+}
+
+impl<'a> SubGroup<'a> {
+    pub fn new(ethnicity: &'a Ethnicity, religion: &'a Religion, population: u64) -> Self {
+        Self {
+            ethnicity,
             religion,
             population,
         }
