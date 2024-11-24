@@ -10,17 +10,17 @@ fn main() {
     let mut brazil = Country::new();
 
     let states = [
-        State::new("SC".into(), "Santa Catarina".into()),
-        State::new("RS".into(), "Rio Grande do Sul".into()),
-        State::new("SP".into(), "Sao Paulo".into()),
+        State::new("SC".into(), "Santa Catarina".into(), 2.3),
+        State::new("RS".into(), "Rio Grande do Sul".into(), 7.4),
+        State::new("SP".into(), "Sao Paulo".into(), 21.6),
     ];
 
     let ethnicities = [
-        Ethnicity::new("Mixed".into()),
-        Ethnicity::new("White".into()),
-        Ethnicity::new("Black".into()),
-        Ethnicity::new("Indigenous".into()),
-        Ethnicity::new("Asian".into()),
+        Ethnicity::new("Mixed".into(), 45.53),
+        Ethnicity::new("White".into(), 43.46),
+        Ethnicity::new("Black".into(), 10.17),
+        Ethnicity::new("Indigenous".into(), 0.60),
+        Ethnicity::new("Asian".into(), 0.42),
     ];
 
     let religions = [
@@ -49,8 +49,10 @@ fn main() {
 
                 for ethnicity in &ethnicities {
                     for religion in &religions {
-                        let population = rand::thread_rng().gen_range(0..10_000);
-                        group.add_sub_group(SubGroup::new(ethnicity, religion, population));
+                        let population = rand::thread_rng().gen_range(
+                            (100.0..(ethnicity.percentage * 1000.0) * state.population_percentage),
+                        );
+                        group.add_sub_group(SubGroup::new(ethnicity, religion, population as u64));
                     }
                 }
 
@@ -61,5 +63,9 @@ fn main() {
         brazil.add_state(state);
     }
 
-    println!("{:#?}", brazil);
+    println!("SC => {:#?}", brazil.get_state_population("SC").unwrap());
+    println!("RS => {:#?}", brazil.get_state_population("RS").unwrap());
+    println!("SP => {:#?}", brazil.get_state_population("SP").unwrap());
+
+    println!("BR => {:#?}", brazil.population);
 }

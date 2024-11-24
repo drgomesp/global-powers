@@ -1,6 +1,6 @@
 use strum_macros::EnumIter;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum Class {
     Upper,
     Middle,
@@ -14,7 +14,7 @@ pub enum Age {
     Senior,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Profession {
     class: Class,
     name: String,
@@ -40,18 +40,19 @@ impl Religion {
 #[derive(Debug)]
 pub struct Ethnicity {
     name: String,
+    pub percentage: f64,
 }
 
 impl Ethnicity {
-    pub fn new(name: String) -> Self {
-        Self { name }
+    pub fn new(name: String, percentage: f64) -> Self {
+        Self { name, percentage }
     }
 }
 
 #[derive(Debug)]
 pub struct Group<'a> {
     state_id: String,
-    profession: &'a Profession,
+    pub profession: &'a Profession,
     sub_groups: Vec<SubGroup<'a>>,
     pub population: u64,
 }

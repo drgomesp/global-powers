@@ -29,6 +29,7 @@ dependencies = [
 name = "global-powers"
 version = "0.1.0"
 dependencies = [
+ "log",
  "rand",
  "strum",
  "strum_macros",
@@ -45,6 +46,12 @@ name = "libc"
 version = "0.2.164"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "433bfe06b8c75da9b2e3fbea6e5329ff87748f0b144ef75306e674c3f6f7c13f"
+
+[[package]]
+name = "log"
+version = "0.4.22"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a7a70ba024b9dc04c27ea2f0c0548feb474ec5c54bba33a7f72f873a39d07b24"
 
 [[package]]
 name = "ppv-lite86"

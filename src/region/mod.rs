@@ -7,15 +7,17 @@ pub struct State<'a> {
     name: String,
     groups: Vec<Group<'a>>,
     pub population: u64,
+    pub population_percentage: f64,
 }
 
 impl<'a> State<'a> {
-    pub fn new(id: String, name: String) -> Self {
+    pub fn new(id: String, name: String, population_percentage: f64) -> Self {
         Self {
             id,
             name,
             groups: vec![],
             population: 0,
+            population_percentage,
         }
     }
 
@@ -42,5 +44,9 @@ impl<'a> Country<'a> {
     pub fn add_state(&mut self, state: State<'a>) {
         self.population += state.population;
         self.states.insert(state.id.clone(), state);
+    }
+
+    pub fn get_state_population(&self, state_id: &str) -> Option<u64> {
+        self.states.get(state_id).map(|state| state.population)
     }
 }
