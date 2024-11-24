@@ -1,4 +1,4 @@
-use crate::population::{Age, Class, Ethnicity, Group, Profession, Religion, SubGroup};
+use crate::population::{Class, Ethnicity, Group, Profession, Religion, SubGroup};
 use crate::region::{Country, State};
 use rand::Rng;
 use strum::IntoEnumIterator;
@@ -7,7 +7,7 @@ mod population;
 mod region;
 
 fn main() {
-    let mut brazil = Country::new();
+    let mut brazil = Country::new("Brazil".into());
 
     let states = [
         State::new("SC".into(), "Santa Catarina".into(), 2.3),
@@ -40,32 +40,24 @@ fn main() {
     let unemployed = Profession::new(Class::Lower, "Unemployed".into());
 
     for mut state in states {
-        for age in Age::iter() {
-            for profession in &professions {
-                let mut group = match age {
-                    Age::Children | Age::Senior => Group::new(state.id.clone(), &unemployed),
-                    Age::Adult => Group::new(state.id.clone(), profession),
-                };
+        for profession in &professions {
+            let mut group = Group::new(state.id.clone(), profession);
 
-                for ethnicity in &ethnicities {
-                    for religion in &religions {
-                        let population = rand::thread_rng().gen_range(
-                            (100.0..(ethnicity.percentage * 1000.0) * state.population_percentage),
-                        );
-                        group.add_sub_group(SubGroup::new(ethnicity, religion, population as u64));
-                    }
+            for ethnicity in &ethnicities {
+                for religion in &religions {
+                    let population = rand::thread_rng().gen_range(
+                        (100.0..(ethnicity.percentage * 1000.0) * state.population_percentage),
+                    );
+
+                    group.add_sub_group(SubGroup::new(ethnicity, religion, population as u64));
                 }
-
-                state.add_group(group)
             }
+
+            state.add_group(group)
         }
 
         brazil.add_state(state);
     }
 
-    println!("SC => {:#?}", brazil.get_state_population("SC").unwrap());
-    println!("RS => {:#?}", brazil.get_state_population("RS").unwrap());
-    println!("SP => {:#?}", brazil.get_state_population("SP").unwrap());
-
-    println!("BR => {:#?}", brazil.population);
+    println!("{:?}", brazil);
 }

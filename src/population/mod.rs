@@ -17,9 +17,8 @@ pub enum Age {
 #[derive(Debug, PartialEq)]
 pub struct Profession {
     class: Class,
-    name: String,
+    pub name: String,
 }
-
 impl Profession {
     pub fn new(class: Class, name: String) -> Self {
         Self { class, name }
@@ -28,7 +27,7 @@ impl Profession {
 
 #[derive(Debug)]
 pub struct Religion {
-    name: String,
+    pub name: String,
 }
 
 impl Religion {
@@ -39,7 +38,7 @@ impl Religion {
 
 #[derive(Debug)]
 pub struct Ethnicity {
-    name: String,
+    pub name: String,
     pub percentage: f64,
 }
 
@@ -53,7 +52,7 @@ impl Ethnicity {
 pub struct Group<'a> {
     state_id: String,
     pub profession: &'a Profession,
-    sub_groups: Vec<SubGroup<'a>>,
+    pub sub_groups: Vec<SubGroup<'a>>,
     pub population: u64,
 }
 
@@ -75,9 +74,9 @@ impl<'a> Group<'a> {
 
 #[derive(Debug)]
 pub struct SubGroup<'a> {
-    ethnicity: &'a Ethnicity,
-    religion: &'a Religion,
-    population: u64,
+    pub ethnicity: &'a Ethnicity,
+    pub religion: &'a Religion,
+    pub population: u64,
 }
 
 impl<'a> SubGroup<'a> {

@@ -1,5 +1,6 @@
 use crate::population::Group;
 use std::collections::HashMap;
+use std::fmt::{Debug, Formatter};
 
 #[derive(Debug)]
 pub struct State<'a> {
@@ -27,15 +28,16 @@ impl<'a> State<'a> {
     }
 }
 
-#[derive(Debug)]
 pub struct Country<'a> {
+    name: String,
     states: HashMap<String, State<'a>>,
     pub population: u64,
 }
 
 impl<'a> Country<'a> {
-    pub fn new() -> Self {
+    pub fn new(name: String) -> Self {
         Self {
+            name,
             states: HashMap::new(),
             population: 0,
         }
@@ -45,8 +47,34 @@ impl<'a> Country<'a> {
         self.population += state.population;
         self.states.insert(state.id.clone(), state);
     }
+}
 
-    pub fn get_state_population(&self, state_id: &str) -> Option<u64> {
-        self.states.get(state_id).map(|state| state.population)
+impl<'a> Debug for Country<'a> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        writeln!(
+            f,
+            "{0: <10} | {1: <20} | {2: <20} | {3: <10} | {4: <10}",
+            "Population", "State", "Profession", "Ethnicity", "Religion"
+        )
+        .expect("TODO");
+
+        for state in self.states.values() {
+            for group in state.groups.iter() {
+                for sub in group.sub_groups.iter() {
+                    writeln!(
+                        f,
+                        "{0: <10} | {1: <20} | {2: <20} | {3: <10} | {4: <10}",
+                        sub.population,
+                        state.name,
+                        group.profession.name,
+                        sub.ethnicity.name,
+                        sub.religion.name
+                    )
+                    .expect("TODO");
+                }
+            }
+        }
+
+        write!(f, "")
     }
 }
