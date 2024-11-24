@@ -1,10 +1,9 @@
 use crate::population::{Ethnicity, Profession, Religion};
-use std::collections::BTreeMap;
 
 #[derive(Debug)]
 pub struct Group<'a> {
     pub profession: &'a Profession,
-    pub sub_groups: BTreeMap<u64, SubGroup<'a>>,
+    pub sub_groups: Vec<SubGroup<'a>>,
     pub population: u64,
 }
 
@@ -12,14 +11,14 @@ impl<'a> Group<'a> {
     pub fn new(profession: &'a Profession) -> Self {
         Self {
             profession,
-            sub_groups: BTreeMap::new(),
+            sub_groups: Vec::new(),
             population: 0,
         }
     }
 
     pub fn add_sub_group(&mut self, sub_group: SubGroup<'a>) {
         self.population += sub_group.population;
-        self.sub_groups.insert(sub_group.population, sub_group);
+        self.sub_groups.push(sub_group)
     }
 }
 

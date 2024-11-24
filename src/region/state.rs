@@ -1,13 +1,13 @@
 use crate::population::group::Group;
 use crate::region::Region;
-use std::collections::BTreeMap;
+use std::collections::HashMap;
 
 #[derive(Debug)]
 pub struct State<'a> {
     pub id: String,
     pub name: String,
     region: Region,
-    pub groups: BTreeMap<u64, Group<'a>>,
+    pub groups: HashMap<String, Group<'a>>,
     pub population: u64,
     pub population_percentage: f64,
 }
@@ -18,7 +18,7 @@ impl<'a> State<'a> {
             id,
             name,
             region,
-            groups: BTreeMap::new(),
+            groups: HashMap::new(),
             population: 0,
             population_percentage,
         }
@@ -26,6 +26,6 @@ impl<'a> State<'a> {
 
     pub fn add_group(&mut self, group: Group<'a>) {
         self.population += group.population;
-        self.groups.insert(group.population, group);
+        self.groups.insert(group.profession.name.clone(), group);
     }
 }

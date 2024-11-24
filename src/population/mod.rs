@@ -21,6 +21,7 @@ pub struct Profession {
     class: Class,
     pub name: String,
 }
+
 impl Profession {
     pub fn new(class: Class, name: String) -> Self {
         Self { class, name }

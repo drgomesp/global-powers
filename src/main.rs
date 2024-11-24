@@ -14,12 +14,7 @@ fn main() {
     let states = [
         State::new("SC".into(), "Santa Catarina".into(), Region::South, 2.3),
         State::new("RS".into(), "Rio Grande do Sul".into(), Region::South, 5.8),
-        State::new(
-            "RJ".into(),
-            "Rio Grande do Sul".into(),
-            Region::Southeast,
-            7.4,
-        ),
+        State::new("RJ".into(), "Rio de Janeiro".into(), Region::Southeast, 7.4),
         State::new("SP".into(), "Sao Paulo".into(), Region::Southeast, 21.6),
     ];
 
