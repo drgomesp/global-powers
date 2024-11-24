@@ -1,7 +1,9 @@
-use crate::population::{Class, Ethnicity, Group, Profession, Religion, SubGroup};
-use crate::region::{Country, State};
+use crate::population::group::{Group, SubGroup};
+use crate::population::{Class, Ethnicity, Profession, Religion};
+use crate::region::country::Country;
+use crate::region::state::State;
+use crate::region::Region;
 use rand::Rng;
-use strum::IntoEnumIterator;
 
 mod population;
 mod region;
@@ -10,9 +12,15 @@ fn main() {
     let mut brazil = Country::new("Brazil".into());
 
     let states = [
-        State::new("SC".into(), "Santa Catarina".into(), 2.3),
-        State::new("RS".into(), "Rio Grande do Sul".into(), 7.4),
-        State::new("SP".into(), "Sao Paulo".into(), 21.6),
+        State::new("SC".into(), "Santa Catarina".into(), Region::South, 2.3),
+        State::new("RS".into(), "Rio Grande do Sul".into(), Region::South, 5.8),
+        State::new(
+            "RJ".into(),
+            "Rio Grande do Sul".into(),
+            Region::Southeast,
+            7.4,
+        ),
+        State::new("SP".into(), "Sao Paulo".into(), Region::Southeast, 21.6),
     ];
 
     let ethnicities = [
@@ -37,23 +45,27 @@ fn main() {
         Profession::new(Class::Upper, "Influencer".into()),
     ];
 
-    let unemployed = Profession::new(Class::Lower, "Unemployed".into());
-
     for mut state in states {
         for profession in &professions {
-            let mut group = Group::new(state.id.clone(), profession);
+            let mut profession_group = Group::new(profession);
 
             for ethnicity in &ethnicities {
                 for religion in &religions {
                     let population = rand::thread_rng().gen_range(
-                        (100.0..(ethnicity.percentage * 1000.0) * state.population_percentage),
+                        (100.0
+                            ..(ethnicity.population_percentage * 1000.0)
+                                * state.population_percentage),
                     );
 
-                    group.add_sub_group(SubGroup::new(ethnicity, religion, population as u64));
+                    profession_group.add_sub_group(SubGroup::new(
+                        ethnicity,
+                        religion,
+                        population as u64,
+                    ));
                 }
             }
 
-            state.add_group(group)
+            state.add_group(profession_group)
         }
 
         brazil.add_state(state);

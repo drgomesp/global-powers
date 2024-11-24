@@ -1,3 +1,5 @@
+pub mod group;
+
 use strum_macros::EnumIter;
 
 #[derive(Debug, PartialEq)]
@@ -39,52 +41,14 @@ impl Religion {
 #[derive(Debug)]
 pub struct Ethnicity {
     pub name: String,
-    pub percentage: f64,
+    pub population_percentage: f64,
 }
 
 impl Ethnicity {
     pub fn new(name: String, percentage: f64) -> Self {
-        Self { name, percentage }
-    }
-}
-
-#[derive(Debug)]
-pub struct Group<'a> {
-    state_id: String,
-    pub profession: &'a Profession,
-    pub sub_groups: Vec<SubGroup<'a>>,
-    pub population: u64,
-}
-
-impl<'a> Group<'a> {
-    pub fn new(state_id: String, profession: &'a Profession) -> Self {
         Self {
-            state_id,
-            profession,
-            sub_groups: Vec::new(),
-            population: 0,
-        }
-    }
-
-    pub fn add_sub_group(&mut self, sub_group: SubGroup<'a>) {
-        self.population += sub_group.population;
-        self.sub_groups.push(sub_group);
-    }
-}
-
-#[derive(Debug)]
-pub struct SubGroup<'a> {
-    pub ethnicity: &'a Ethnicity,
-    pub religion: &'a Religion,
-    pub population: u64,
-}
-
-impl<'a> SubGroup<'a> {
-    pub fn new(ethnicity: &'a Ethnicity, religion: &'a Religion, population: u64) -> Self {
-        Self {
-            ethnicity,
-            religion,
-            population,
+            name,
+            population_percentage: percentage,
         }
     }
 }
