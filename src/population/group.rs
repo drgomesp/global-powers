@@ -7,18 +7,14 @@ pub struct Group<'a> {
     pub profession: &'a Profession,
     pub sub_groups: Vec<SubGroup<'a>>,
     pub population: u64,
-    pub wealth: Wealth,
-    pub income: Income,
 }
 
 impl<'a> Group<'a> {
-    pub fn new(profession: &'a Profession, wealth: Wealth, income: Income) -> Self {
+    pub fn new(profession: &'a Profession) -> Self {
         Self {
             profession,
             sub_groups: Vec::new(),
             population: 0,
-            wealth,
-            income,
         }
     }
 
@@ -41,14 +37,24 @@ impl<'a> Group<'a> {
 pub struct SubGroup<'a> {
     pub ethnicity: &'a Ethnicity,
     pub religion: &'a Religion,
+    pub wealth: Wealth,
+    pub income: Income,
     pub population: u64,
 }
 
 impl<'a> SubGroup<'a> {
-    pub fn new(ethnicity: &'a Ethnicity, religion: &'a Religion, population: u64) -> Self {
+    pub fn new(
+        ethnicity: &'a Ethnicity,
+        religion: &'a Religion,
+        wealth: Wealth,
+        income: Income,
+        population: u64,
+    ) -> Self {
         Self {
             ethnicity,
             religion,
+            wealth,
+            income,
             population,
         }
     }

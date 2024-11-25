@@ -1,3 +1,5 @@
+#![feature(exclusive_range_pattern)]
+
 use crate::population::group::{Group, SubGroup};
 use crate::population::income::Income;
 use crate::population::income::Periodicity::Daily;
@@ -15,7 +17,6 @@ use crate::region::Region::{South, Southeast};
 use chrono::{DateTime, Datelike, Duration, Local};
 use num_format::{Locale, ToFormattedString};
 use rand::Rng;
-use std::io::Write;
 use std::ops::Add;
 use std::thread::sleep;
 use std::time::Duration as StdDuration;
@@ -69,27 +70,7 @@ fn main() {
 
             let wealth_level = rand::thread_rng().gen_range(rate..rate + 10);
 
-            let mut profession_group = Group::new(
-                profession,
-                Wealth::new(
-                    wealth_level,
-                    rand::thread_rng().gen_range(1..1_000 * wealth_level),
-                    match wealth_level {
-                        0..5 => Impoverished,
-                        5..10 => Struggling,
-                        10..15 => Poor,
-                        15..20 => Adequate,
-                        20..25 => Good,
-                        25..30 => Excellent,
-                        30..35 => Prosperous,
-                        35..40 => Wealthy,
-                        40..45 => Lavish,
-                        45..50 => Ostentatious,
-                        i => panic!("invalid wealth level {i}"),
-                    },
-                ),
-                Income::new(Daily, 0, 400),
-            );
+            let mut profession_group = Group::new(profession);
 
             for ethnicity in &ethnicities {
                 for religion in &religions {
@@ -102,6 +83,24 @@ fn main() {
                     profession_group.add_sub_group(SubGroup::new(
                         ethnicity,
                         religion,
+                        Wealth::new(
+                            wealth_level,
+                            rand::thread_rng().gen_range(1..1_000 * wealth_level),
+                            match wealth_level {
+                                0..5 => Impoverished,
+                                5..10 => Struggling,
+                                10..15 => Poor,
+                                15..20 => Adequate,
+                                20..25 => Good,
+                                25..30 => Excellent,
+                                30..35 => Prosperous,
+                                35..40 => Wealthy,
+                                40..45 => Lavish,
+                                45..50 => Ostentatious,
+                                i => panic!("invalid wealth level {i}"),
+                            },
+                        ),
+                        Income::new(Daily, 0, 400),
                         population as u64,
                     ));
                 }

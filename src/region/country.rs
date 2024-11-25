@@ -93,9 +93,9 @@ impl<'a> Debug for Country<'a> {
                         group.profession.name,
                         sub_group.ethnicity.name,
                         sub_group.religion.name,
-                        group.wealth.level,
-                        group.wealth.amount,
-                        group.wealth.sol,
+                        sub_group.wealth.level,
+                        sub_group.wealth.amount,
+                        sub_group.wealth.sol,
                     )?;
                 }
             }
