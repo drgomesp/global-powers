@@ -1,5 +1,6 @@
 use crate::population::group::{Group, SubGroup};
 use crate::population::{Class, Ethnicity, Profession, Religion};
+use crate::region::country::rates::Rates;
 use crate::region::country::Country;
 use crate::region::state::State;
 use crate::region::Region;
@@ -14,7 +15,8 @@ mod population;
 mod region;
 
 fn main() {
-    let mut brazil = Country::new("Brazil".into());
+    let rates = Rates::new(1.3);
+    let mut brazil = Country::new("Brazil".into(), rates);
 
     let states = [
         State::new("SC".into(), "Santa Catarina".into(), Region::South, 2.3),
@@ -82,7 +84,9 @@ fn main() {
             brazil.population.to_formatted_string(&Locale::en)
         );
 
-        sleep(StdDuration::from_millis(100));
+        brazil.update_population();
+
+        sleep(StdDuration::from_millis(1000));
 
         print!("\x1B[2J\x1B[1;1H"); // println!("{:?}", brazil);
     }

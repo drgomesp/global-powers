@@ -1,3 +1,6 @@
+pub mod rates;
+
+use crate::region::country::rates::Rates;
 use crate::region::state::State;
 use num_format::{Locale, ToFormattedString};
 use std::collections::HashMap;
@@ -7,14 +10,22 @@ pub struct Country<'a> {
     pub name: String,
     states: HashMap<String, State<'a>>,
     pub population: u64,
+    rates: Rates,
 }
 
 impl<'a> Country<'a> {
-    pub fn new(name: String) -> Self {
+    pub fn update_population(&mut self) {
+        self.population += (self.population as f64 * (self.rates.population_growth / 100.0)) as u64;
+    }
+}
+
+impl<'a> Country<'a> {
+    pub fn new(name: String, rates: Rates) -> Self {
         Self {
             name,
             states: HashMap::new(),
             population: 0,
+            rates,
         }
     }
 
