@@ -2,7 +2,9 @@ pub mod rates;
 
 use crate::region::country::rates::Rates;
 use crate::region::state::State;
+use crate::region::Region;
 use num_format::{Locale, ToFormattedString};
+use std::cmp::PartialEq;
 use std::collections::HashMap;
 use std::fmt::{Debug, Formatter};
 
@@ -14,7 +16,7 @@ pub struct Country<'a> {
 
 impl<'a> Country<'a> {
     pub fn update_population(&mut self) {
-        for (id, mut state) in self.states.iter_mut() {
+        for (_, state) in self.states.iter_mut() {
             state.update_population(self.rates.population_growth);
         }
     }
@@ -42,6 +44,19 @@ impl<'a> Country<'a> {
 
     pub fn get_population_by_state(&self, state_id: String) -> u64 {
         self.states.get(&state_id).unwrap().population()
+    }
+
+    pub fn get_population_by_region(&self, region: Region) -> u64 {
+        self.states
+            .iter()
+            .map(|(_, state)| {
+                if state.region == region {
+                    state.population()
+                } else {
+                    0
+                }
+            })
+            .sum()
     }
 }
 

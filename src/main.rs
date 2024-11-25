@@ -4,6 +4,7 @@ use crate::region::country::rates::Rates;
 use crate::region::country::Country;
 use crate::region::state::State;
 use crate::region::Region;
+use crate::region::Region::{South, Southeast};
 use chrono::{DateTime, Datelike, Duration, Local};
 use num_format::{Locale, ToFormattedString};
 use rand::Rng;
@@ -86,36 +87,56 @@ fn main() {
         );
 
         println!(
-            "{} | Population: {:?}",
+            "{} | Population: {}",
             "SP",
             brazil
                 .get_population_by_state("SP".into())
                 .to_formatted_string(&Locale::en)
         );
+
         println!(
-            "{} | Population: {:?}",
+            "State: {} | Population: {}",
             "RJ",
             brazil
                 .get_population_by_state("RJ".into())
                 .to_formatted_string(&Locale::en)
         );
+
         println!(
-            "{} | Population: {:?}",
+            "State: {} | Population: {}",
             "RS",
             brazil
                 .get_population_by_state("RS".into())
                 .to_formatted_string(&Locale::en)
         );
+
         println!(
-            "{} | Population: {:?}",
+            "State: {} | Population: {}",
             "SC",
             brazil
                 .get_population_by_state("SC".into())
                 .to_formatted_string(&Locale::en)
         );
 
+        println!(
+            "Region: {} | Population: {}",
+            "Southeast",
+            brazil
+                .get_population_by_region(Southeast)
+                .to_formatted_string(&Locale::en)
+        );
+
+        println!(
+            "Region: {} | Population: {}",
+            "South",
+            brazil
+                .get_population_by_region(South)
+                .to_formatted_string(&Locale::en)
+        );
+
         if day.year() > year {
             year = day.year().clone();
+
             brazil.update_population();
         }
 

@@ -6,7 +6,7 @@ use std::collections::HashMap;
 pub struct State<'a> {
     pub id: String,
     pub name: String,
-    region: Region,
+    pub region: Region,
     pub groups: HashMap<String, Group<'a>>,
     pub population_percentage: f64,
 }
