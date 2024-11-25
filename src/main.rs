@@ -4,7 +4,7 @@ use crate::region::country::rates::Rates;
 use crate::region::country::Country;
 use crate::region::state::State;
 use crate::region::Region;
-use chrono::{DateTime, Duration, Local};
+use chrono::{DateTime, Datelike, Duration, Local};
 use num_format::{Locale, ToFormattedString};
 use rand::Rng;
 use std::ops::Add;
@@ -74,6 +74,7 @@ fn main() {
     }
 
     let mut day: DateTime<Local> = Local::now();
+    let mut year = day.year().clone();
 
     loop {
         day = day.add(Duration::days(1));
@@ -84,9 +85,12 @@ fn main() {
             brazil.population.to_formatted_string(&Locale::en)
         );
 
-        brazil.update_population();
+        if day.year() > year {
+            year = day.year().clone();
+            brazil.update_population();
+        }
 
-        sleep(StdDuration::from_millis(1000));
+        sleep(StdDuration::from_millis(10));
 
         print!("\x1B[2J\x1B[1;1H"); // println!("{:?}", brazil);
     }
