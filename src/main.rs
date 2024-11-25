@@ -3,7 +3,12 @@ use crate::population::{Class, Ethnicity, Profession, Religion};
 use crate::region::country::Country;
 use crate::region::state::State;
 use crate::region::Region;
+use chrono::{DateTime, Duration, Local};
+use num_format::{Locale, ToFormattedString};
 use rand::Rng;
+use std::ops::Add;
+use std::thread::sleep;
+use std::time::Duration as StdDuration;
 
 mod population;
 mod region;
@@ -66,5 +71,19 @@ fn main() {
         brazil.add_state(state);
     }
 
-    println!("{:?}", brazil);
+    let mut day: DateTime<Local> = Local::now();
+
+    loop {
+        day = day.add(Duration::days(1));
+
+        println!(
+            "{} | Population: {}",
+            day.format("%d/%m/%Y"),
+            brazil.population.to_formatted_string(&Locale::en)
+        );
+
+        sleep(StdDuration::from_millis(100));
+
+        print!("\x1B[2J\x1B[1;1H"); // println!("{:?}", brazil);
+    }
 }
