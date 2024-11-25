@@ -1,4 +1,6 @@
 use crate::population::group::{Group, SubGroup};
+use crate::population::income::Income;
+use crate::population::income::Periodicity::{Daily, Monthly, Weekly};
 use crate::population::{Class, Ethnicity, Profession, Religion};
 use crate::region::country::rates::Rates;
 use crate::region::country::Country;
@@ -44,9 +46,21 @@ fn main() {
     ];
 
     let professions = [
-        Profession::new(Class::Lower, "Construction Worker".into()),
-        Profession::new(Class::Middle, "Public Worker".into()),
-        Profession::new(Class::Upper, "Influencer".into()),
+        Profession::new(
+            Class::Lower,
+            "Construction Worker".into(),
+            Income::new(Daily, 0, 400),
+        ),
+        Profession::new(
+            Class::Middle,
+            "Public Worker".into(),
+            Income::new(Monthly, 0, 14_500),
+        ),
+        Profession::new(
+            Class::Upper,
+            "Influencer".into(),
+            Income::new(Weekly, 7_500, 23_500),
+        ),
     ];
 
     for mut state in states {
@@ -147,7 +161,7 @@ fn main() {
             brazil.update_population();
         }
 
-        sleep(StdDuration::from_millis(10));
+        sleep(StdDuration::from_millis(100));
 
         print!("\x1B[2J\x1B[1;1H");
     }

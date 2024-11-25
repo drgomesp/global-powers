@@ -1,5 +1,7 @@
 pub mod group;
+pub mod income;
 
+use crate::population::income::Income;
 use strum_macros::EnumIter;
 
 #[derive(Debug, PartialEq)]
@@ -20,11 +22,16 @@ pub enum Age {
 pub struct Profession {
     class: Class,
     pub name: String,
+    pub income: Income,
 }
 
 impl Profession {
-    pub fn new(class: Class, name: String) -> Self {
-        Self { class, name }
+    pub fn new(class: Class, name: String, income: Income) -> Self {
+        Self {
+            class,
+            name,
+            income,
+        }
     }
 }
 

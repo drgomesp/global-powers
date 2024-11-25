@@ -5,6 +5,8 @@ pub struct Group<'a> {
     pub profession: &'a Profession,
     pub sub_groups: Vec<SubGroup<'a>>,
     pub population: u64,
+    /// The monthly income of the population group.
+    pub income: u64,
 }
 
 impl<'a> Group<'a> {
@@ -13,6 +15,7 @@ impl<'a> Group<'a> {
             profession,
             sub_groups: Vec::new(),
             population: 0,
+            income: 0,
         }
     }
 
