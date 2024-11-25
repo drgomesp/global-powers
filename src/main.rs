@@ -27,11 +27,11 @@ fn main() {
     ];
 
     let religions = [
-        Religion::new("Catholic".into()),
-        Religion::new("Protestant".into()),
-        Religion::new("African".into()),
-        Religion::new("Agnostic".into()),
-        Religion::new("Other".into()),
+        Religion::new("Catholic".into(), 64.6),
+        Religion::new("Protestant".into(), 24.0),
+        Religion::new("African".into(), 3.0),
+        Religion::new("Agnostic".into(), 8.0),
+        Religion::new("Other".into(), 1.0),
     ];
 
     let professions = [
@@ -47,9 +47,9 @@ fn main() {
             for ethnicity in &ethnicities {
                 for religion in &religions {
                     let population = rand::thread_rng().gen_range(
-                        (100.0
-                            ..(ethnicity.population_percentage * 1000.0)
-                                * state.population_percentage),
+                        (10.0..(ethnicity.population_percentage * 100.0)
+                            * state.population_percentage
+                            * religion.population_percentage),
                     );
 
                     profession_group.add_sub_group(SubGroup::new(

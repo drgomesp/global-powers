@@ -31,11 +31,15 @@ impl Profession {
 #[derive(Debug)]
 pub struct Religion {
     pub name: String,
+    pub population_percentage: f64,
 }
 
 impl Religion {
-    pub fn new(name: String) -> Self {
-        Self { name }
+    pub fn new(name: String, population_percentage: f64) -> Self {
+        Self {
+            name,
+            population_percentage,
+        }
     }
 }
 
