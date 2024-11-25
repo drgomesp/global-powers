@@ -8,6 +8,7 @@ use crate::region::Region::{South, Southeast};
 use chrono::{DateTime, Datelike, Duration, Local};
 use num_format::{Locale, ToFormattedString};
 use rand::Rng;
+use std::io::Write;
 use std::ops::Add;
 use std::thread::sleep;
 use std::time::Duration as StdDuration;
@@ -80,58 +81,64 @@ fn main() {
     loop {
         day = day.add(Duration::days(1));
 
+        println!("{0: <10} | {1: <10}", "Country", "Population",);
+
         println!(
-            "{} | Population: {}",
+            "{0: <10} | {1: <20}\n",
             day.format("%d/%m/%Y"),
             brazil.get_population().to_formatted_string(&Locale::en)
         );
 
+        println!("{0: <10} | {1: <10}", "State", "Population",);
+
         println!(
-            "{} | Population: {}",
+            "{0: <10} | {1: <20}",
             "SP",
             brazil
                 .get_population_by_state("SP".into())
-                .to_formatted_string(&Locale::en)
+                .to_formatted_string(&Locale::en),
         );
 
         println!(
-            "State: {} | Population: {}",
+            "{0: <10} | {1: <20}",
             "RJ",
             brazil
                 .get_population_by_state("RJ".into())
-                .to_formatted_string(&Locale::en)
+                .to_formatted_string(&Locale::en),
         );
 
         println!(
-            "State: {} | Population: {}",
+            "{0: <10} | {1: <20}",
             "RS",
             brazil
                 .get_population_by_state("RS".into())
-                .to_formatted_string(&Locale::en)
+                .to_formatted_string(&Locale::en),
         );
 
         println!(
-            "State: {} | Population: {}",
+            "{0: <10} | {1: <20}",
             "SC",
             brazil
                 .get_population_by_state("SC".into())
-                .to_formatted_string(&Locale::en)
+                .to_formatted_string(&Locale::en),
         );
 
+        println!("\n{0: <10} | {1: <10}", "Region", "Population",);
+
         println!(
-            "Region: {} | Population: {}",
+            "{0: <10} | {1: <20}",
             "Southeast",
             brazil
                 .get_population_by_region(Southeast)
-                .to_formatted_string(&Locale::en)
+                .to_formatted_string(&Locale::en),
         );
 
         println!(
-            "Region: {} | Population: {}",
+            "{0: <10} | {1: <20}",
             "South",
             brazil
                 .get_population_by_region(South)
-                .to_formatted_string(&Locale::en)
+                .to_formatted_string(&Locale::en),
         );
 
         if day.year() > year {
@@ -141,6 +148,7 @@ fn main() {
         }
 
         sleep(StdDuration::from_millis(10));
-        print!("\x1B[2J\x1B[1;1H"); // println!("{:?}", brazil);
+
+        print!("\x1B[2J\x1B[1;1H");
     }
 }
