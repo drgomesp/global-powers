@@ -1,3 +1,5 @@
+use crate::population::income::Income;
+use crate::population::wealth::Wealth;
 use crate::population::{Ethnicity, Profession, Religion};
 
 #[derive(Debug)]
@@ -5,17 +7,18 @@ pub struct Group<'a> {
     pub profession: &'a Profession,
     pub sub_groups: Vec<SubGroup<'a>>,
     pub population: u64,
-    /// The monthly income of the population group.
-    pub income: u64,
+    pub wealth: Wealth,
+    pub income: Income,
 }
 
 impl<'a> Group<'a> {
-    pub fn new(profession: &'a Profession) -> Self {
+    pub fn new(profession: &'a Profession, wealth: Wealth, income: Income) -> Self {
         Self {
             profession,
             sub_groups: Vec::new(),
             population: 0,
-            income: 0,
+            wealth,
+            income,
         }
     }
 
@@ -25,7 +28,12 @@ impl<'a> Group<'a> {
     }
 
     pub fn update_population(&mut self, growth_rate: f64) {
-        self.population += (self.population as f64 * (growth_rate / 100.0)) as u64;
+        self.population = 0;
+
+        for mut sub_group in self.sub_groups.iter_mut() {
+            sub_group.population += (sub_group.population as f64 * (growth_rate / 100.0)) as u64;
+            self.population += sub_group.population;
+        }
     }
 }
 

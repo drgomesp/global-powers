@@ -1,15 +1,9 @@
 pub mod group;
 pub mod income;
+pub mod wealth;
 
-use crate::population::income::Income;
+use std::fmt::Formatter;
 use strum_macros::EnumIter;
-
-#[derive(Debug, PartialEq)]
-pub enum Class {
-    Upper,
-    Middle,
-    Lower,
-}
 
 #[derive(Debug, EnumIter)]
 pub enum Age {
@@ -19,19 +13,43 @@ pub enum Age {
 }
 
 #[derive(Debug, PartialEq)]
+pub enum Class {
+    Upper,
+    UpperMiddle,
+    Middle,
+    LowerMiddle,
+    Lower,
+}
+
+#[derive(Debug, PartialEq)]
+pub enum StandardOfLiving {
+    Impoverished,
+    Struggling,
+    Poor,
+    Adequate,
+    Good,
+    Excellent,
+    Prosperous,
+    Wealthy,
+    Lavish,
+    Ostentatious,
+}
+
+impl std::fmt::Display for StandardOfLiving {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
+
+#[derive(Debug, PartialEq)]
 pub struct Profession {
-    class: Class,
+    pub class: Class,
     pub name: String,
-    pub income: Income,
 }
 
 impl Profession {
-    pub fn new(class: Class, name: String, income: Income) -> Self {
-        Self {
-            class,
-            name,
-            income,
-        }
+    pub fn new(class: Class, name: String) -> Self {
+        Self { class, name }
     }
 }
 

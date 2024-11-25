@@ -1,6 +1,11 @@
 use crate::population::group::{Group, SubGroup};
 use crate::population::income::Income;
-use crate::population::income::Periodicity::{Daily, Monthly, Weekly};
+use crate::population::income::Periodicity::Daily;
+use crate::population::wealth::Wealth;
+use crate::population::StandardOfLiving::{
+    Adequate, Excellent, Good, Impoverished, Lavish, Ostentatious, Poor, Prosperous, Struggling,
+    Wealthy,
+};
 use crate::population::{Class, Ethnicity, Profession, Religion};
 use crate::region::country::rates::Rates;
 use crate::region::country::Country;
@@ -33,39 +38,58 @@ fn main() {
         Ethnicity::new("Mixed".into(), 45.53),
         Ethnicity::new("White".into(), 43.46),
         Ethnicity::new("Black".into(), 10.17),
-        Ethnicity::new("Indigenous".into(), 0.60),
-        Ethnicity::new("Asian".into(), 0.42),
+        // Ethnicity::new("Indigenous".into(), 0.60),
+        // Ethnicity::new("Asian".into(), 0.42),
     ];
 
     let religions = [
         Religion::new("Catholic".into(), 64.6),
         Religion::new("Protestant".into(), 24.0),
         Religion::new("African".into(), 3.0),
-        Religion::new("Agnostic".into(), 8.0),
-        Religion::new("Other".into(), 1.0),
+        // Religion::new("Agnostic".into(), 8.0),
     ];
 
     let professions = [
-        Profession::new(
-            Class::Lower,
-            "Construction Worker".into(),
-            Income::new(Daily, 0, 400),
-        ),
-        Profession::new(
-            Class::Middle,
-            "Public Worker".into(),
-            Income::new(Monthly, 0, 14_500),
-        ),
-        Profession::new(
-            Class::Upper,
-            "Influencer".into(),
-            Income::new(Weekly, 7_500, 23_500),
-        ),
+        Profession::new(Class::Lower, "Construction Worker".into()),
+        Profession::new(Class::LowerMiddle, "Drivers".into()),
+        Profession::new(Class::Middle, "Public Worker".into()),
+        Profession::new(Class::UpperMiddle, "Influencer".into()),
+        Profession::new(Class::Upper, "Business Owner".into()),
     ];
 
     for mut state in states {
         for profession in &professions {
-            let mut profession_group = Group::new(profession);
+            let rate = match profession.class {
+                Class::Lower => 1,
+                Class::LowerMiddle => 10,
+                Class::Middle => 20,
+                Class::UpperMiddle => 30,
+                Class::Upper => 40,
+            };
+
+            let wealth_level = rand::thread_rng().gen_range(rate..rate + 10);
+
+            let mut profession_group = Group::new(
+                profession,
+                Wealth::new(
+                    wealth_level,
+                    rand::thread_rng().gen_range(1..1_000 * wealth_level),
+                    match wealth_level {
+                        0..5 => Impoverished,
+                        5..10 => Struggling,
+                        10..15 => Poor,
+                        15..20 => Adequate,
+                        20..25 => Good,
+                        25..30 => Excellent,
+                        30..35 => Prosperous,
+                        35..40 => Wealthy,
+                        40..45 => Lavish,
+                        45..50 => Ostentatious,
+                        i => panic!("invalid wealth level {i}"),
+                    },
+                ),
+                Income::new(Daily, 0, 400),
+            );
 
             for ethnicity in &ethnicities {
                 for religion in &religions {
@@ -95,46 +119,10 @@ fn main() {
     loop {
         day = day.add(Duration::days(1));
 
-        println!("{0: <10} | {1: <10}", "Country", "Population",);
-
         println!(
             "{0: <10} | {1: <20}\n",
             day.format("%d/%m/%Y"),
             brazil.get_population().to_formatted_string(&Locale::en)
-        );
-
-        println!("{0: <10} | {1: <10}", "State", "Population",);
-
-        println!(
-            "{0: <10} | {1: <20}",
-            "SP",
-            brazil
-                .get_population_by_state("SP".into())
-                .to_formatted_string(&Locale::en),
-        );
-
-        println!(
-            "{0: <10} | {1: <20}",
-            "RJ",
-            brazil
-                .get_population_by_state("RJ".into())
-                .to_formatted_string(&Locale::en),
-        );
-
-        println!(
-            "{0: <10} | {1: <20}",
-            "RS",
-            brazil
-                .get_population_by_state("RS".into())
-                .to_formatted_string(&Locale::en),
-        );
-
-        println!(
-            "{0: <10} | {1: <20}",
-            "SC",
-            brazil
-                .get_population_by_state("SC".into())
-                .to_formatted_string(&Locale::en),
         );
 
         println!("\n{0: <10} | {1: <10}", "Region", "Population",);
@@ -161,6 +149,7 @@ fn main() {
             brazil.update_population();
         }
 
+        print!("\n{:?}", brazil);
         sleep(StdDuration::from_millis(100));
 
         print!("\x1B[2J\x1B[1;1H");

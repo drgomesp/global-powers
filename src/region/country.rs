@@ -64,18 +64,22 @@ impl<'a> Debug for Country<'a> {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         writeln!(
             f,
-            "{} | Pop: {}",
-            self.name,
-            self.get_population().to_formatted_string(&Locale::en)
-        )?;
-
-        writeln!(
-            f,
-            "{0: <10} | {1: <20} | {2: <20} | {3: <10} | {4: <10}",
-            "Population", "State", "Profession", "Ethnicity", "Religion"
+            "{0: <10} | {1: <20} | {2: <20} | {3: <10} | {4: <10} | {5: <15} | {6: <15} | {7: <10}",
+            "Population",
+            "State",
+            "Profession",
+            "Ethnicity",
+            "Religion",
+            "Wealth Level",
+            "Wealth Amount",
+            "Standard of Living",
         )?;
 
         for state in self.states.values() {
+            if !state.id.eq("SP") {
+                continue;
+            }
+
             for (_, group) in state.groups.iter() {
                 let mut v: Vec<_> = group.sub_groups.iter().collect();
                 v.sort_by(|a, b| a.population.partial_cmp(&b.population).unwrap());
@@ -83,12 +87,15 @@ impl<'a> Debug for Country<'a> {
                 for sub_group in v.iter().rev() {
                     writeln!(
                         f,
-                        "{0: <10} | {1: <20} | {2: <20} | {3: <10} | {4: <10}",
+                        "{0: <10} | {1: <20} | {2: <20} | {3: <10} | {4: <10} | {5: <15} | {6: <15} | {7: <10}",
                         sub_group.population.to_formatted_string(&Locale::en),
                         state.name,
                         group.profession.name,
                         sub_group.ethnicity.name,
-                        sub_group.religion.name
+                        sub_group.religion.name,
+                        group.wealth.level,
+                        group.wealth.amount,
+                        group.wealth.sol,
                     )?;
                 }
             }
