@@ -9,13 +9,14 @@ use std::fmt::{Debug, Formatter};
 pub struct Country<'a> {
     pub name: String,
     states: HashMap<String, State<'a>>,
-    pub population: u64,
     rates: Rates,
 }
 
 impl<'a> Country<'a> {
     pub fn update_population(&mut self) {
-        self.population += (self.population as f64 * (self.rates.population_growth / 100.0)) as u64;
+        for (id, mut state) in self.states.iter_mut() {
+            state.update_population(self.rates.population_growth);
+        }
     }
 }
 
@@ -24,14 +25,23 @@ impl<'a> Country<'a> {
         Self {
             name,
             states: HashMap::new(),
-            population: 0,
             rates,
         }
     }
 
     pub fn add_state(&mut self, state: State<'a>) {
-        self.population += state.population;
         self.states.insert(state.id.clone(), state);
+    }
+
+    pub fn get_population(&self) -> u64 {
+        self.states
+            .iter()
+            .map(|(_, state)| state.population())
+            .sum()
+    }
+
+    pub fn get_population_by_state(&self, state_id: String) -> u64 {
+        self.states.get(&state_id).unwrap().population()
     }
 }
 
@@ -41,7 +51,7 @@ impl<'a> Debug for Country<'a> {
             f,
             "{} | Pop: {}",
             self.name,
-            self.population.to_formatted_string(&Locale::en)
+            self.get_population().to_formatted_string(&Locale::en)
         )?;
 
         writeln!(

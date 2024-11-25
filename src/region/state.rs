@@ -8,7 +8,6 @@ pub struct State<'a> {
     pub name: String,
     region: Region,
     pub groups: HashMap<String, Group<'a>>,
-    pub population: u64,
     pub population_percentage: f64,
 }
 
@@ -19,13 +18,21 @@ impl<'a> State<'a> {
             name,
             region,
             groups: HashMap::new(),
-            population: 0,
             population_percentage,
         }
     }
 
     pub fn add_group(&mut self, group: Group<'a>) {
-        self.population += group.population;
         self.groups.insert(group.profession.name.clone(), group);
+    }
+
+    pub fn update_population(&mut self, growth_rate: f64) {
+        for (_, group) in self.groups.iter_mut() {
+            group.update_population(growth_rate);
+        }
+    }
+
+    pub fn population(&self) -> u64 {
+        self.groups.iter().map(|(_, group)| group.population).sum()
     }
 }

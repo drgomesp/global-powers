@@ -20,6 +20,10 @@ impl<'a> Group<'a> {
         self.population += sub_group.population;
         self.sub_groups.push(sub_group)
     }
+
+    pub fn update_population(&mut self, growth_rate: f64) {
+        self.population += (self.population as f64 * (growth_rate / 100.0)) as u64;
+    }
 }
 
 #[derive(Debug)]

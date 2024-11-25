@@ -82,7 +82,36 @@ fn main() {
         println!(
             "{} | Population: {}",
             day.format("%d/%m/%Y"),
-            brazil.population.to_formatted_string(&Locale::en)
+            brazil.get_population().to_formatted_string(&Locale::en)
+        );
+
+        println!(
+            "{} | Population: {:?}",
+            "SP",
+            brazil
+                .get_population_by_state("SP".into())
+                .to_formatted_string(&Locale::en)
+        );
+        println!(
+            "{} | Population: {:?}",
+            "RJ",
+            brazil
+                .get_population_by_state("RJ".into())
+                .to_formatted_string(&Locale::en)
+        );
+        println!(
+            "{} | Population: {:?}",
+            "RS",
+            brazil
+                .get_population_by_state("RS".into())
+                .to_formatted_string(&Locale::en)
+        );
+        println!(
+            "{} | Population: {:?}",
+            "SC",
+            brazil
+                .get_population_by_state("SC".into())
+                .to_formatted_string(&Locale::en)
         );
 
         if day.year() > year {
@@ -91,7 +120,6 @@ fn main() {
         }
 
         sleep(StdDuration::from_millis(10));
-
         print!("\x1B[2J\x1B[1;1H"); // println!("{:?}", brazil);
     }
 }
