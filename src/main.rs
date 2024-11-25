@@ -1,5 +1,3 @@
-#![feature(exclusive_range_pattern)]
-
 use crate::population::group::{Group, SubGroup};
 use crate::population::income::Income;
 use crate::population::income::Periodicity::Daily;
@@ -23,6 +21,7 @@ use std::time::Duration as StdDuration;
 
 mod population;
 mod region;
+mod trade;
 
 fn main() {
     let rates = Rates::new(1.3);
@@ -40,7 +39,7 @@ fn main() {
         Ethnicity::new("White".into(), 43.46),
         Ethnicity::new("Black".into(), 10.17),
         // Ethnicity::new("Indigenous".into(), 0.60),
-        // Ethnicity::new("Asian".into(), 0.42),
+        Ethnicity::new("Asian".into(), 0.42),
     ];
 
     let religions = [
@@ -68,8 +67,6 @@ fn main() {
                 Class::Upper => 40,
             };
 
-            let wealth_level = rand::thread_rng().gen_range(rate..rate + 10);
-
             let mut profession_group = Group::new(profession);
 
             for ethnicity in &ethnicities {
@@ -79,6 +76,8 @@ fn main() {
                             * state.population_percentage
                             * religion.population_percentage),
                     );
+
+                    let wealth_level = rand::thread_rng().gen_range(rate..rate + 10);
 
                     profession_group.add_sub_group(SubGroup::new(
                         ethnicity,
@@ -149,7 +148,7 @@ fn main() {
         }
 
         print!("\n{:?}", brazil);
-        sleep(StdDuration::from_millis(100));
+        sleep(StdDuration::from_millis(25));
 
         print!("\x1B[2J\x1B[1;1H");
     }

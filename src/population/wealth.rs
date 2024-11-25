@@ -1,5 +1,11 @@
 use crate::population::StandardOfLiving;
+use crate::trade::{ConsumptionLevel, Good};
 use std::fmt::Formatter;
+
+#[derive(Debug, Default, PartialEq)]
+pub struct Needs {
+    pub goods: Vec<(Good, ConsumptionLevel)>,
+}
 
 #[derive(Debug, PartialEq)]
 pub struct Wealth {
