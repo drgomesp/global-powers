@@ -1,6 +1,5 @@
 pub mod rates;
 
-use crate::population::Ethnicity;
 use crate::region::country::rates::Rates;
 use crate::region::state::State;
 use crate::region::Region;
@@ -11,7 +10,6 @@ use std::fmt::{Debug, Formatter};
 
 pub struct Country<'a> {
     pub name: String,
-    pub ethnicities: &'a Vec<Ethnicity>,
     states: HashMap<String, State<'a>>,
     rates: Rates,
 }
@@ -25,10 +23,9 @@ impl<'a> Country<'a> {
 }
 
 impl<'a> Country<'a> {
-    pub fn new(name: String, rates: Rates, ethnicities: &'a Vec<Ethnicity>) -> Self {
+    pub fn new(name: String, rates: Rates) -> Self {
         Self {
             name,
-            ethnicities,
             states: HashMap::new(),
             rates,
         }
@@ -91,7 +88,7 @@ impl<'a> Debug for Country<'a> {
                         f,
                         "{0: <10} | {1: <20} | {2: <20} | {3: <10} | {4: <10} | {5: <15} | {6: <10}",
                         sub_group.population.to_formatted_string(&Locale::en),
-                        state.name,
+                        group.state.name,
                         group.profession.name,
                         sub_group.ethnicity.name,
                         sub_group.religion.name,

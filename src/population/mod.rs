@@ -1,4 +1,5 @@
 pub mod group;
+mod heritage;
 pub mod income;
 mod need;
 pub mod wealth;
@@ -13,7 +14,7 @@ pub enum Age {
     Senior,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum Class {
     Upper,
     UpperMiddle,
@@ -22,7 +23,7 @@ pub enum Class {
     Lower,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum StandardOfLiving {
     Impoverished,
     Struggling,
@@ -42,7 +43,7 @@ impl std::fmt::Display for StandardOfLiving {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Profession {
     pub class: Class,
     pub name: String,

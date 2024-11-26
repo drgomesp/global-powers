@@ -2,7 +2,7 @@ use crate::population::group::Group;
 use crate::region::Region;
 use std::collections::HashMap;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct State<'a> {
     pub id: String,
     pub name: String,

@@ -2,17 +2,20 @@ use crate::population::income::Income;
 use crate::population::need::Need;
 use crate::population::wealth::Wealth;
 use crate::population::{Ethnicity, Profession, Religion, StandardOfLiving};
+use crate::region::state::State;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Group<'a> {
-    pub profession: &'a Profession,
+    pub state: State<'a>,
+    pub profession: Profession,
     pub sub_groups: Vec<SubGroup<'a>>,
     pub population: u64,
 }
 
 impl<'a> Group<'a> {
-    pub fn new(profession: &'a Profession) -> Self {
+    pub fn new(state: State<'a>, profession: Profession) -> Self {
         Self {
+            state,
             profession,
             sub_groups: Vec::new(),
             population: 0,
@@ -34,7 +37,7 @@ impl<'a> Group<'a> {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct SubGroup<'a> {
     pub ethnicity: &'a Ethnicity,
     pub religion: &'a Religion,

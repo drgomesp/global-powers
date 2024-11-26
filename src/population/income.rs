@@ -1,13 +1,13 @@
 use strum_macros::Display;
 
-#[derive(Debug, Display, PartialEq)]
+#[derive(Clone, Debug, Display, PartialEq)]
 pub enum Periodicity {
     Daily,
     Weekly,
     Monthly,
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Income {
     pub periodicity: Periodicity,
 

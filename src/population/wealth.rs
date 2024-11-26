@@ -1,6 +1,6 @@
 use std::fmt::Formatter;
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Wealth {
     pub level: u64,
     pub amount: u64,

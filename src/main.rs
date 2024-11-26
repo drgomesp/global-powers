@@ -27,16 +27,17 @@ fn main() {
     let rates = Rates::new(1.3);
 
     let ethnicities = vec![
-        Ethnicity::new("Mixed".into(), 45.53),
+        Ethnicity::new("Brown".into(), 45.53),
+        Ethnicity::new("White".into(), 43.46),
         Ethnicity::new("White".into(), 43.46),
         Ethnicity::new("Black".into(), 10.17),
         // Ethnicity::new("Indigenous".into(), 0.60),
         // Ethnicity::new("Asian".into(), 0.42),
     ];
 
-    let mut brazil = Country::new("Brazil".into(), rates, &ethnicities);
+    let mut brazil = Country::new("Brazil".into(), rates);
 
-    let states = [
+    let states = vec![
         State::new("SC".into(), "Santa Catarina".into(), Region::South, 2.3),
         State::new("RS".into(), "Rio Grande do Sul".into(), Region::South, 5.8),
         State::new("RJ".into(), "Rio de Janeiro".into(), Region::Southeast, 7.4),
@@ -68,7 +69,7 @@ fn main() {
                 Class::Upper => 40,
             };
 
-            let mut profession_group = Group::new(profession);
+            let mut profession_group = Group::new(state.clone(), profession.clone());
 
             for ethnicity in &ethnicities {
                 for religion in &religions {
@@ -106,7 +107,7 @@ fn main() {
                 }
             }
 
-            state.add_group(profession_group)
+            state.add_group(profession_group);
         }
 
         brazil.add_state(state);
@@ -129,7 +130,18 @@ fn main() {
             brazil.name,
             brazil.get_population().to_formatted_string(&Locale::en)
         );
-        println!("{0: <10} | {1: <10}", "Region", "Population",);
+
+        println!("{0: <10} | {1: <10}", "State", "Population",);
+
+        println!(
+            "{0: <10} | {1: <20}",
+            "Sao Paulo",
+            brazil
+                .get_population_by_state("SP".into())
+                .to_formatted_string(&Locale::en),
+        );
+
+        println!("\n{0: <10} | {1: <10}", "Region", "Population",);
 
         println!(
             "{0: <10} | {1: <20}",
