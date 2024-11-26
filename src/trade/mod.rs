@@ -5,6 +5,13 @@ pub enum ConsumptionLevel {
     High,
     VeryHigh,
 }
+#[derive(Debug, PartialEq)]
+pub enum ConsumptionTendency {
+    Temporary,
+    Constant,
+    Linear,
+    Exponential,
+}
 
 #[derive(Debug, PartialEq)]
 pub struct Good {

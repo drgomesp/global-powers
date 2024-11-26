@@ -1,12 +1,8 @@
-use crate::trade::{ConsumptionLevel, Good};
+use crate::trade::{ConsumptionLevel, ConsumptionTendency, Good};
 
-#[derive(Debug, Default, PartialEq)]
+#[derive(Debug, PartialEq)]
 pub struct Need {
-    goods: Vec<(Good, ConsumptionLevel)>,
-}
-
-impl Need {
-    pub fn new() -> Self {
-        Self { goods: Vec::new() }
-    }
+    good: Good,
+    consumption_level: ConsumptionLevel,
+    consumption_over_time: ConsumptionTendency,
 }

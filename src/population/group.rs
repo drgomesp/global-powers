@@ -1,4 +1,5 @@
 use crate::population::income::Income;
+use crate::population::need::Need;
 use crate::population::wealth::Wealth;
 use crate::population::{Ethnicity, Profession, Religion, StandardOfLiving};
 
@@ -40,6 +41,7 @@ pub struct SubGroup<'a> {
     pub wealth: Wealth,
     pub income: Income,
     pub sol: StandardOfLiving,
+    pub needs: Vec<Need>,
     pub population: u64,
 }
 
@@ -58,6 +60,7 @@ impl<'a> SubGroup<'a> {
             wealth,
             income,
             sol,
+            needs: Vec::new(),
             population,
         }
     }

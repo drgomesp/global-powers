@@ -1,4 +1,6 @@
-#[derive(Debug, PartialEq)]
+use strum_macros::Display;
+
+#[derive(Debug, Display, PartialEq)]
 pub enum Periodicity {
     Daily,
     Weekly,

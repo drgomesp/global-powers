@@ -1,6 +1,6 @@
 use crate::population::group::{Group, SubGroup};
 use crate::population::income::Income;
-use crate::population::income::Periodicity::Daily;
+use crate::population::income::Periodicity::Weekly;
 use crate::population::wealth::Wealth;
 use crate::population::StandardOfLiving::{
     Adequate, Excellent, Good, Impoverished, Lavish, Ostentatious, Poor, Prosperous, Struggling,
@@ -25,21 +25,22 @@ mod trade;
 
 fn main() {
     let rates = Rates::new(1.3);
-    let mut brazil = Country::new("Brazil".into(), rates);
+
+    let ethnicities = vec![
+        Ethnicity::new("Mixed".into(), 45.53),
+        Ethnicity::new("White".into(), 43.46),
+        Ethnicity::new("Black".into(), 10.17),
+        // Ethnicity::new("Indigenous".into(), 0.60),
+        // Ethnicity::new("Asian".into(), 0.42),
+    ];
+
+    let mut brazil = Country::new("Brazil".into(), rates, &ethnicities);
 
     let states = [
         State::new("SC".into(), "Santa Catarina".into(), Region::South, 2.3),
         State::new("RS".into(), "Rio Grande do Sul".into(), Region::South, 5.8),
         State::new("RJ".into(), "Rio de Janeiro".into(), Region::Southeast, 7.4),
         State::new("SP".into(), "Sao Paulo".into(), Region::Southeast, 21.6),
-    ];
-
-    let ethnicities = [
-        Ethnicity::new("Mixed".into(), 45.53),
-        Ethnicity::new("White".into(), 43.46),
-        Ethnicity::new("Black".into(), 10.17),
-        // Ethnicity::new("Indigenous".into(), 0.60),
-        Ethnicity::new("Asian".into(), 0.42),
     ];
 
     let religions = [
@@ -72,7 +73,7 @@ fn main() {
             for ethnicity in &ethnicities {
                 for religion in &religions {
                     let population = rand::thread_rng().gen_range(
-                        (10.0..(ethnicity.population_percentage * 100.0)
+                        (10.0..(ethnicity.population_percentage * 10.0)
                             * state.population_percentage
                             * religion.population_percentage),
                     );
@@ -86,7 +87,7 @@ fn main() {
                             wealth_level,
                             rand::thread_rng().gen_range(1..1_000 * wealth_level),
                         ),
-                        Income::new(Daily, 0, 400),
+                        Income::new(Weekly, 0, 400),
                         match wealth_level {
                             0..5 => Impoverished,
                             5..10 => Struggling,
@@ -118,12 +119,17 @@ fn main() {
         day = day.add(Duration::days(1));
 
         println!(
-            "{0: <10} | {1: <20}\n",
-            day.format("%d/%m/%Y"),
-            brazil.get_population().to_formatted_string(&Locale::en)
+            "{0: <10} | {1: <10} | {2: <10}",
+            "Date", "Country", "Population",
         );
 
-        println!("\n{0: <10} | {1: <10}", "Region", "Population",);
+        println!(
+            "{0: <10} | {1: <10} | {2: <20}\n",
+            day.format("%d/%m/%Y"),
+            brazil.name,
+            brazil.get_population().to_formatted_string(&Locale::en)
+        );
+        println!("{0: <10} | {1: <10}", "Region", "Population",);
 
         println!(
             "{0: <10} | {1: <20}",

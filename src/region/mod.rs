@@ -3,7 +3,7 @@ pub mod state;
 
 use std::fmt::Debug;
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum Region {
     North,
     Northeast,
