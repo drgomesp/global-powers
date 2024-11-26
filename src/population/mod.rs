@@ -1,5 +1,6 @@
 pub mod group;
 pub mod income;
+mod need;
 pub mod wealth;
 
 use std::fmt::Formatter;

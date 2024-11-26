@@ -64,14 +64,13 @@ impl<'a> Debug for Country<'a> {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         writeln!(
             f,
-            "{0: <10} | {1: <20} | {2: <20} | {3: <10} | {4: <10} | {5: <15} | {6: <15} | {7: <10}",
+            "{0: <10} | {1: <20} | {2: <20} | {3: <10} | {4: <10} | {5: <15} | {6: <10}",
             "Population",
             "State",
             "Profession",
             "Ethnicity",
             "Religion",
-            "Wealth Level",
-            "Wealth Amount",
+            "Wealth",
             "Standard of Living",
         )?;
 
@@ -87,15 +86,14 @@ impl<'a> Debug for Country<'a> {
                 for sub_group in v.iter().rev() {
                     writeln!(
                         f,
-                        "{0: <10} | {1: <20} | {2: <20} | {3: <10} | {4: <10} | {5: <15} | {6: <15} | {7: <10}",
+                        "{0: <10} | {1: <20} | {2: <20} | {3: <10} | {4: <10} | {5: <15} | {6: <10}",
                         sub_group.population.to_formatted_string(&Locale::en),
                         state.name,
                         group.profession.name,
                         sub_group.ethnicity.name,
                         sub_group.religion.name,
-                        sub_group.wealth.level,
-                        sub_group.wealth.amount,
-                        sub_group.wealth.sol,
+                        format!("{:.2} ({:.2})", sub_group.wealth.level, sub_group.wealth.amount),
+                        sub_group.sol,
                     )?;
                 }
             }

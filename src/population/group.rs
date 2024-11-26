@@ -1,6 +1,6 @@
 use crate::population::income::Income;
 use crate::population::wealth::Wealth;
-use crate::population::{Ethnicity, Profession, Religion};
+use crate::population::{Ethnicity, Profession, Religion, StandardOfLiving};
 
 #[derive(Debug)]
 pub struct Group<'a> {
@@ -39,6 +39,7 @@ pub struct SubGroup<'a> {
     pub religion: &'a Religion,
     pub wealth: Wealth,
     pub income: Income,
+    pub sol: StandardOfLiving,
     pub population: u64,
 }
 
@@ -48,6 +49,7 @@ impl<'a> SubGroup<'a> {
         religion: &'a Religion,
         wealth: Wealth,
         income: Income,
+        sol: StandardOfLiving,
         population: u64,
     ) -> Self {
         Self {
@@ -55,6 +57,7 @@ impl<'a> SubGroup<'a> {
             religion,
             wealth,
             income,
+            sol,
             population,
         }
     }
