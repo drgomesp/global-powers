@@ -4,5 +4,5 @@ use crate::trade::{ConsumptionLevel, ConsumptionTendency, Good};
 pub struct Need {
     good: Good,
     consumption_level: ConsumptionLevel,
-    consumption_over_time: ConsumptionTendency,
+    consumption_tendency: ConsumptionTendency,
 }

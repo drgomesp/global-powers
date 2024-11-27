@@ -1,12 +1,16 @@
+use crate::population::culture::Culture;
+use crate::population::ethnicity::Ethnicity;
 use crate::population::group::{Group, SubGroup};
+use crate::population::heritage::Heritage;
 use crate::population::income::Income;
 use crate::population::income::Periodicity::Weekly;
+use crate::population::nationality::Nationality::Brazilian;
 use crate::population::wealth::Wealth;
 use crate::population::StandardOfLiving::{
     Adequate, Excellent, Good, Impoverished, Lavish, Ostentatious, Poor, Prosperous, Struggling,
     Wealthy,
 };
-use crate::population::{Class, Ethnicity, Profession, Religion};
+use crate::population::{Class, Profession, Religion};
 use crate::region::country::rates::Rates;
 use crate::region::country::Country;
 use crate::region::state::State;
@@ -82,7 +86,10 @@ fn main() {
                     let wealth_level = rand::thread_rng().gen_range(rate..rate + 10);
 
                     profession_group.add_sub_group(SubGroup::new(
+                        Brazilian,
+                        &Culture {},
                         ethnicity,
+                        &Heritage {},
                         religion,
                         Wealth::new(
                             wealth_level,

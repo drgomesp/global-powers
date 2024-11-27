@@ -1,7 +1,10 @@
+pub mod culture;
+pub mod ethnicity;
 pub mod group;
-mod heritage;
+pub mod heritage;
 pub mod income;
-mod need;
+pub mod nationality;
+pub mod need;
 pub mod wealth;
 
 use std::fmt::Formatter;
@@ -66,21 +69,6 @@ impl Religion {
         Self {
             name,
             population_percentage,
-        }
-    }
-}
-
-#[derive(Debug)]
-pub struct Ethnicity {
-    pub name: String,
-    pub population_percentage: f64,
-}
-
-impl Ethnicity {
-    pub fn new(name: String, percentage: f64) -> Self {
-        Self {
-            name,
-            population_percentage: percentage,
         }
     }
 }
