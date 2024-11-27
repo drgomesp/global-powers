@@ -63,6 +63,18 @@ fn main() {
         Profession::new(Class::Upper, "Business Owner".into()),
     ];
 
+    let cultures = vec![
+        Culture::new("Paulista".into()),
+        Culture::new("Gaucho".into()),
+        Culture::new("Nordestino".into()),
+    ];
+
+    let heritages = [
+        Heritage::new("Portuguese".into()),
+        Heritage::new("Italian".into()),
+        Heritage::new("German".into()),
+    ];
+
     for mut state in states {
         for profession in &professions {
             let rate = match profession.class {
@@ -84,12 +96,15 @@ fn main() {
                     );
 
                     let wealth_level = rand::thread_rng().gen_range(rate..rate + 10);
+                    let random_key = rand::thread_rng().gen_range(0..2);
+                    let heritage = &heritages[random_key];
+                    let culture = &cultures[random_key];
 
                     profession_group.add_sub_group(SubGroup::new(
                         Brazilian,
-                        &Culture {},
+                        culture,
                         ethnicity,
-                        &Heritage {},
+                        heritage,
                         religion,
                         Wealth::new(
                             wealth_level,
@@ -173,7 +188,7 @@ fn main() {
         }
 
         print!("\n{:?}", brazil);
-        sleep(StdDuration::from_millis(25));
+        sleep(StdDuration::from_millis(100));
 
         print!("\x1B[2J\x1B[1;1H");
     }
