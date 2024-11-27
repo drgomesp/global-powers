@@ -15,19 +15,21 @@ use crate::region::country::rates::Rates;
 use crate::region::country::Country;
 use crate::region::state::State;
 use crate::region::Region;
-use crate::region::Region::{South, Southeast};
-use chrono::{DateTime, Datelike, Duration, Local};
-use num_format::{Locale, ToFormattedString};
+use chrono::{DateTime, Datelike, Local};
+use num_format::ToFormattedString;
 use rand::Rng;
 use std::ops::Add;
-use std::thread::sleep;
 use std::time::Duration as StdDuration;
 
+use ratatui::{style::Stylize, widgets::Widget};
+use strum::IntoEnumIterator;
+
+pub mod app;
 mod population;
 mod region;
 mod trade;
 
-fn main() {
+fn main() -> Result<()> {
     let rates = Rates::new(1.3);
 
     let ethnicities = vec![
@@ -138,58 +140,97 @@ fn main() {
     let mut day: DateTime<Local> = Local::now();
     let mut year = day.year().clone();
 
+    color_eyre::install()?;
+    let terminal = ratatui::init();
+    let app_result = App::default().run(terminal);
+    ratatui::restore();
+
+    app_result
+
+    // loop {
+    //     day = day.add(Duration::days(1));
+    //
+    //     println!(
+    //         "{0: <10} | {1: <10} | {2: <10}",
+    //         "Date", "Country", "Population",
+    //     );
+    //
+    //     println!(
+    //         "{0: <10} | {1: <10} | {2: <20}\n",
+    //         day.format("%d/%m/%Y"),
+    //         brazil.name,
+    //         brazil.get_population().to_formatted_string(&Locale::en)
+    //     );
+    //
+    //     println!("{0: <10} | {1: <10}", "State", "Population",);
+    //
+    //     println!(
+    //         "{0: <10} | {1: <20}",
+    //         "Sao Paulo",
+    //         brazil
+    //             .get_population_by_state("SP".into())
+    //             .to_formatted_string(&Locale::en),
+    //     );
+    //
+    //     println!("\n{0: <10} | {1: <10}", "Region", "Population",);
+    //
+    //     println!(
+    //         "{0: <10} | {1: <20}",
+    //         "Southeast",
+    //         brazil
+    //             .get_population_by_region(Southeast)
+    //             .to_formatted_string(&Locale::en),
+    //     );
+    //
+    //     println!(
+    //         "{0: <10} | {1: <20}",
+    //         "South",
+    //         brazil
+    //             .get_population_by_region(South)
+    //             .to_formatted_string(&Locale::en),
+    //     );
+    //
+    //     if day.year() > year {
+    //         year = day.year().clone();
+    //
+    //         brazil.update_population();
+    //     }
+    //
+    //     print!("\n{:?}", brazil);
+    //     sleep(StdDuration::from_millis(100));
+    //
+    //     print!("\x1B[2J\x1B[1;1H");
+    // }
+}
+
+use crate::app::App;
+use color_eyre::{eyre::Context, Result};
+use ratatui::{
+    crossterm::event::{self, Event, KeyCode},
+    widgets::Paragraph,
+    DefaultTerminal, Frame,
+};
+
+fn run(mut terminal: DefaultTerminal) -> Result<()> {
     loop {
-        day = day.add(Duration::days(1));
-
-        println!(
-            "{0: <10} | {1: <10} | {2: <10}",
-            "Date", "Country", "Population",
-        );
-
-        println!(
-            "{0: <10} | {1: <10} | {2: <20}\n",
-            day.format("%d/%m/%Y"),
-            brazil.name,
-            brazil.get_population().to_formatted_string(&Locale::en)
-        );
-
-        println!("{0: <10} | {1: <10}", "State", "Population",);
-
-        println!(
-            "{0: <10} | {1: <20}",
-            "Sao Paulo",
-            brazil
-                .get_population_by_state("SP".into())
-                .to_formatted_string(&Locale::en),
-        );
-
-        println!("\n{0: <10} | {1: <10}", "Region", "Population",);
-
-        println!(
-            "{0: <10} | {1: <20}",
-            "Southeast",
-            brazil
-                .get_population_by_region(Southeast)
-                .to_formatted_string(&Locale::en),
-        );
-
-        println!(
-            "{0: <10} | {1: <20}",
-            "South",
-            brazil
-                .get_population_by_region(South)
-                .to_formatted_string(&Locale::en),
-        );
-
-        if day.year() > year {
-            year = day.year().clone();
-
-            brazil.update_population();
+        terminal.draw(draw)?;
+        if should_quit()? {
+            break;
         }
-
-        print!("\n{:?}", brazil);
-        sleep(StdDuration::from_millis(100));
-
-        print!("\x1B[2J\x1B[1;1H");
     }
+    Ok(())
+}
+
+fn draw(frame: &mut Frame) {
+    let greeting = Paragraph::new("Hello World! (press 'q' to quit)");
+    frame.render_widget(greeting, frame.area());
+}
+
+fn should_quit() -> Result<bool> {
+    if event::poll(StdDuration::from_millis(250)).context("event poll failed")? {
+        if let Event::Key(key) = event::read().context("event read failed")? {
+            return Ok(KeyCode::Char('q') == key.code);
+        }
+    }
+    Ok(false)
 }
