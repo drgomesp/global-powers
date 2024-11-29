@@ -1,9 +1,9 @@
-use crate::population::culture::Culture;
+#![warn(clippy::too_many_arguments)]
+
 use crate::population::ethnicity::Ethnicity;
-use crate::population::heritage::Heritage;
 use crate::population::income::Income;
 use crate::population::nationality::Nationality;
-use crate::population::need::Need;
+use crate::population::race::Race;
 use crate::population::wealth::Wealth;
 use crate::population::{Profession, Religion, StandardOfLiving};
 use crate::region::state::State;
@@ -43,41 +43,45 @@ impl<'a> Group<'a> {
 
 #[derive(Clone, Debug)]
 pub struct SubGroup<'a> {
+    pub info: SubGroupInfo<'a>,
+    pub population: u64,
+}
+
+#[derive(Clone, Debug)]
+pub struct SubGroupInfo<'a> {
     pub nationality: Nationality,
-    pub culture: &'a Culture,
+    pub race: &'a Race,
     pub ethnicity: &'a Ethnicity,
-    pub heritage: &'a Heritage,
     pub religion: &'a Religion,
     pub wealth: Wealth,
     pub income: Income,
     pub sol: StandardOfLiving,
-    pub needs: Vec<Need>,
-    pub population: u64,
 }
 
-impl<'a> SubGroup<'a> {
+impl<'a> SubGroupInfo<'a> {
     pub fn new(
         nationality: Nationality,
-        culture: &'a Culture,
+        race: &'a Race,
         ethnicity: &'a Ethnicity,
-        heritage: &'a Heritage,
         religion: &'a Religion,
         wealth: Wealth,
         income: Income,
         sol: StandardOfLiving,
-        population: u64,
     ) -> Self {
         Self {
             nationality,
-            culture,
+            race,
             ethnicity,
-            heritage,
             religion,
             wealth,
             income,
             sol,
-            needs: Vec::new(),
-            population,
         }
+    }
+}
+
+impl<'a> SubGroup<'a> {
+    pub fn new(info: SubGroupInfo<'a>, population: u64) -> Self {
+        Self { info, population }
     }
 }

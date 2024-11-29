@@ -1,10 +1,9 @@
-pub mod culture;
 pub mod ethnicity;
 pub mod group;
-pub mod heritage;
 pub mod income;
 pub mod nationality;
 pub mod need;
+pub mod race;
 pub mod wealth;
 
 use std::fmt::Formatter;

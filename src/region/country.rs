@@ -36,10 +36,7 @@ impl<'a> Country<'a> {
     }
 
     pub fn get_population(&self) -> u64 {
-        self.states
-            .iter()
-            .map(|(_, state)| state.population())
-            .sum()
+        self.states.values().map(|state| state.population()).sum()
     }
 
     pub fn get_population_by_state(&self, state_id: String) -> u64 {
@@ -48,8 +45,8 @@ impl<'a> Country<'a> {
 
     pub fn get_population_by_region(&self, region: Region) -> u64 {
         self.states
-            .iter()
-            .map(|(_, state)| {
+            .values()
+            .map(|state| {
                 if state.region == region {
                     state.population()
                 } else {
@@ -64,15 +61,16 @@ impl<'a> Debug for Country<'a> {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         writeln!(
             f,
-            "{0: <10} | {1: <20} | {2: <20} | {3: <10} | {4: <10} | {5: <10} | {6: <15} | {7: <10} | {8: <10}",
+            "{0: <10} | {1: <10} | {2: <20} | {3: <10} | {4: <15} | {5: <10} | {6: <10} | {7: <10} | {8: <10} | {9: <10}",
             "Population",
             "State",
             "Profession",
-            "Culture",
+            "Race",
+            "Nationality",
             "Ethnicity",
-            "Heritage",
             "Religion",
             "Wealth",
+            "Income",
             "Standard of Living",
         )?;
 
@@ -88,16 +86,17 @@ impl<'a> Debug for Country<'a> {
                 for sub_group in v.iter().rev() {
                     writeln!(
                         f,
-                        "{0: <10} | {1: <20} | {2: <20} | {3: <10} | {4: <10} | {5: <10} | {6: <15} | {7: <10} | {8: <10}",
+                        "{0: <10} | {1: <10} | {2: <20} | {3: <10} | {4: <15} | {5: <10} | {6: <10} | {7: <10} | {8: <10} | {9: <10}",
                         sub_group.population.to_formatted_string(&Locale::en),
                         group.state.name,
                         group.profession.name,
-                        sub_group.culture.name,
-                        sub_group.ethnicity.name,
-                        sub_group.heritage.name,
-                        sub_group.religion.name,
-                        format!("{:.2} ({:.2})", sub_group.wealth.level, sub_group.wealth.amount),
-                        sub_group.sol,
+                        sub_group.info.race.name,
+                        format!("{:?}", sub_group.info.nationality),
+                        sub_group.info.ethnicity.name,
+                        sub_group.info.religion.name,
+                        format!("{:.2} ({:.2})", sub_group.info.wealth.level, sub_group.info.wealth.amount),
+                        sub_group.info.income.earned,
+                        sub_group.info.sol,
                     )?;
                 }
             }

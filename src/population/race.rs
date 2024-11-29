@@ -1,9 +1,9 @@
 #[derive(Debug)]
-pub struct Heritage {
+pub struct Race {
     pub name: String,
 }
 
-impl Heritage {
+impl Race {
     pub fn new(name: String) -> Self {
         Self { name }
     }
