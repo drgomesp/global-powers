@@ -1,24 +1,26 @@
-use crate::population::ethnicity::Ethnicity;
 use crate::population::group::{Group, SubGroup, SubGroupInfo};
+use crate::population::heritage::Heritage;
 use crate::population::{Class, Profession, Religion};
 use crate::region::country::rates::Rates;
 use crate::region::country::Country;
 use crate::region::state::State;
 use crate::region::Region;
 use chrono::{DateTime, Datelike, Duration, Local};
+use egui::FontFamily::Proportional;
+use egui::FontId;
+use egui::TextStyle::{Body, Button, Heading, Monospace, Small};
 use rand::Rng;
 use std::ops::Add;
 use std::thread::sleep;
 use std::time::Duration as StdDuration;
-
 mod population;
 mod region;
 mod trade;
 
+use crate::population::ethnicity::Ethnicity;
 use crate::population::income::Income;
 use crate::population::income::Periodicity::Weekly;
 use crate::population::nationality::Nationality::Brazilian;
-use crate::population::race::Race;
 use crate::population::wealth::Wealth;
 use crate::population::StandardOfLiving::{
     Adequate, Excellent, Good, Impoverished, Lavish, Ostentatious, Poor, Prosperous, Struggling,
@@ -31,20 +33,20 @@ fn main() -> eframe::Result {
     let rates = Rates::new(1.3);
 
     let races = [
-        Race::new("White".into()),
-        Race::new("Black".into()),
-        Race::new("Mixed".into()),
-        Race::new("Indigenous".into()),
-        Race::new("Asian".into()),
+        Ethnicity::new("White".into()),
+        Ethnicity::new("Black".into()),
+        Ethnicity::new("Brown".into()),
+        Ethnicity::new("Indigenous".into()),
+        Ethnicity::new("Asian".into()),
     ];
 
     let ethnicities = vec![
-        Ethnicity::new("Portuguese".into(), 45.53),
-        Ethnicity::new("Italian".into(), 13.08),
-        Ethnicity::new("Spanish".into(), 14.70),
-        Ethnicity::new("German".into(), 18.276),
-        Ethnicity::new("Angolan".into(), 2.39),
-        Ethnicity::new("Japanese".into(), 0.47),
+        Heritage::new("Portuguese".into(), 45.53),
+        Heritage::new("Italian".into(), 13.08),
+        Heritage::new("Spanish".into(), 14.70),
+        Heritage::new("German".into(), 18.276),
+        Heritage::new("Angolan".into(), 2.39),
+        Heritage::new("Japanese".into(), 0.47),
         // Ethnicity::new("Indigenous".into(), 0.60),
         // Ethnicity::new("Asian".into(), 0.42),
     ];
@@ -95,7 +97,7 @@ fn main() -> eframe::Result {
                     );
 
                     let wealth_level = rand::thread_rng().gen_range(rate..rate + 10);
-                    let random_key = rand::thread_rng().gen_range(0..2);
+                    let random_key = rand::thread_rng().gen_range(0..3);
                     let race = &races[random_key];
 
                     profession_group.add_sub_group(SubGroup::new(
@@ -141,32 +143,38 @@ fn main() -> eframe::Result {
     let mut day: DateTime<Local> = Local::now();
     let mut year = day.year().clone();
 
-    // env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
-    //
-    // let options = eframe::NativeOptions {
-    //     viewport: egui::ViewportBuilder::default().with_inner_size([320.0, 240.0]),
-    //     ..Default::default()
-    // };
-    //
-    // // Our application state:
-    // let mut name = "Arthur".to_owned();
-    // let mut age = 42;
-    //
-    // eframe::run_simple_native("My egui App", options, move |ctx, _frame| {
-    //     egui::CentralPanel::default().show(ctx, |ui| {
-    //         ui.heading("My egui Application");
-    //         ui.horizontal(|ui| {
-    //             let name_label = ui.label("Your name: ");
-    //             ui.text_edit_singleline(&mut name)
-    //                 .labelled_by(name_label.id);
-    //         });
-    //         ui.add(egui::Slider::new(&mut age, 0..=120).text("age"));
-    //         if ui.button("Increment").clicked() {
-    //             age += 1;
-    //         }
-    //         ui.label(format!("Hello '{name}', age {age}"));
-    //     });
-    // })
+    env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
+
+    let options = eframe::NativeOptions {
+        viewport: egui::ViewportBuilder::default().with_inner_size([320.0, 240.0]),
+        ..Default::default()
+    };
+
+    eframe::run_simple_native("My egui App", options, move |ctx, _frame| {
+        egui::CentralPanel::default().show(ctx, |ui| {
+            let mut style = (*ctx.style()).clone();
+            style.text_styles = [
+                (Heading, FontId::new(20.0, Proportional)),
+                (Body, FontId::new(20.0, Proportional)),
+                (Monospace, FontId::new(20.0, Proportional)),
+                (Button, FontId::new(20.0, Proportional)),
+                (Small, FontId::new(20.0, Proportional)),
+            ]
+            .into();
+            ctx.set_style(style);
+
+            egui::TopBottomPanel::top("top_panel")
+                .resizable(false)
+                .min_height(32.0)
+                .show_inside(ui, |ui| {
+                    egui::ScrollArea::vertical().show(ui, |ui| {
+                        ui.vertical_centered(|ui| {
+                            ui.heading("Expandable Upper Panel");
+                        });
+                    });
+                });
+        });
+    })?;
 
     loop {
         day = day.add(Duration::days(1));
@@ -222,4 +230,15 @@ fn main() -> eframe::Result {
 
         print!("\x1B[2J\x1B[1;1H");
     }
+}
+
+fn lorem_ipsum(ui: &mut egui::Ui) {
+    ui.with_layout(
+        egui::Layout::top_down(egui::Align::LEFT).with_cross_justify(true),
+        |ui| {
+            ui.label("ASDASD");
+            ui.add(egui::Separator::default().grow(8.0));
+            ui.label("ASDASD");
+        },
+    );
 }

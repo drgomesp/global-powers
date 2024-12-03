@@ -1,9 +1,9 @@
 #![warn(clippy::too_many_arguments)]
 
 use crate::population::ethnicity::Ethnicity;
+use crate::population::heritage::Heritage;
 use crate::population::income::Income;
 use crate::population::nationality::Nationality;
-use crate::population::race::Race;
 use crate::population::wealth::Wealth;
 use crate::population::{Profession, Religion, StandardOfLiving};
 use crate::region::state::State;
@@ -50,8 +50,8 @@ pub struct SubGroup<'a> {
 #[derive(Clone, Debug)]
 pub struct SubGroupInfo<'a> {
     pub nationality: Nationality,
-    pub race: &'a Race,
-    pub ethnicity: &'a Ethnicity,
+    pub race: &'a Ethnicity,
+    pub ethnicity: &'a Heritage,
     pub religion: &'a Religion,
     pub wealth: Wealth,
     pub income: Income,
@@ -61,8 +61,8 @@ pub struct SubGroupInfo<'a> {
 impl<'a> SubGroupInfo<'a> {
     pub fn new(
         nationality: Nationality,
-        race: &'a Race,
-        ethnicity: &'a Ethnicity,
+        race: &'a Ethnicity,
+        ethnicity: &'a Heritage,
         religion: &'a Religion,
         wealth: Wealth,
         income: Income,
